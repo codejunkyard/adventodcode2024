@@ -1,9 +1,9 @@
+use _utils_::fetch_input;
 use dotenv::dotenv;
-use reqwest::blocking::Client;
 use std::env;
 use std::error::Error;
 
-fn main() -> Result<(), Box<dyn std::error::Error>> {
+fn main() -> Result<(), Box<dyn Error>> {
     // Load environment variables from .env file
     dotenv().ok();
     let url = "https://adventofcode.com/2024/day/1/input";
@@ -33,21 +33,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("Similarity score: {}", similarity_score);
 
     Ok(())
-}
-
-fn fetch_input(url: &str, session_token: &str) -> Result<String, Box<dyn Error>> {
-    let client = Client::new();
-    let response = client
-        .get(url)
-        .header("Cookie", format!("session={}", session_token))
-        .header("User-Agent", "my-rust-app")
-        .send()?;
-
-    if response.status().is_success() {
-        Ok(response.text()?)
-    } else {
-        Err(format!("Failed to fetch input: HTTP {}", response.status()).into())
-    }
 }
 
 fn parse_input(input: &str) -> (Vec<i32>, Vec<i32>) {

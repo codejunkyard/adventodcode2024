@@ -1,8 +1,9 @@
 use _utils_::fetch_input;
 use dotenv::dotenv;
 use std::env;
+use std::error::Error;
 
-fn main() -> Result<(), Box<dyn std::error::Error>> {
+fn main() -> Result<(), Box<dyn Error>> {
     // Load environment variables from .env file
     dotenv().ok();
     let url = "https://adventofcode.com/2024/day/4/input";

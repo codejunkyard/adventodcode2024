@@ -1,21 +1,24 @@
 [package]
-name = "historian_histeria"
+name = "red_nosed_reports"
 version = "0.1.0"
 edition = "2021"
 
 # Optional metadata
 authors = ["Gabriel Vautour <gabriel.a.vautour@gmail.com>"]
-description = "Advent of Code: Day 1: Historian Hysteria"
+description = "Advent of Code: Day 2: Red-Nosed Reports"
 license = "MIT"
 
 [dependencies]
-# Add reqwest for HTTP requests
-reqwest = { version = "0.11", features = ["json", "blocking"] }
+# Custom library for reusable functions
+advent_lib = { path = "../advent_lib" }
+
 # Add tokio if using asynchronous reqwest
 tokio = { version = "1", features = ["full"] }
 
 # Add serde if working with JSON
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
+
+regex = "1"
 
 dotenv = "0.15"
