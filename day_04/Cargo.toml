@@ -1,0 +1,8 @@
+[package]
+name = "day_04"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+_utils_ = { path = "../_utils_" }
+dotenv = "0.15"
