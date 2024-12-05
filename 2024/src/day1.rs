@@ -1,9 +1,11 @@
-use _utils_::fetch_input;
+use advent_lib::fetch_input;
 use dotenv::dotenv;
 use std::env;
 use std::error::Error;
 
-fn main() -> Result<(), Box<dyn Error>> {
+pub fn solve() -> Result<(), Box<dyn Error>> {
+    println!("Solving Day 1...");
+
     // Load environment variables from .env file
     dotenv().ok();
     let url = "https://adventofcode.com/2024/day/1/input";
@@ -23,14 +25,14 @@ fn main() -> Result<(), Box<dyn Error>> {
         sum += (list1[i] - list2[i]).abs();
     }
 
-    println!("{sum}");
+    println!("Part 1: Total distance: {sum}");
 
     for i in list1.iter() {
         let count = list2.iter().filter(|&n| *n == *i).count();
         similarity_score += count as i32 * *i; // Convert count to i32 and dereference i
     }
 
-    println!("Similarity score: {}", similarity_score);
+    println!("Part 2: Similarity score: {similarity_score}");
 
     Ok(())
 }

@@ -1,9 +1,11 @@
-use _utils_::fetch_input;
+use advent_lib::fetch_input;
 use dotenv::dotenv;
 use std::env;
 use std::error::Error;
 
-fn main() -> Result<(), Box<dyn Error>> {
+pub fn solve() -> Result<(), Box<dyn Error>> {
+    println!("Solving Day 2...");
+
     // Load environment variables from .env file
     dotenv().ok();
     let url = "https://adventofcode.com/2024/day/2/input";
@@ -13,7 +15,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     let data = parse_input(&input);
     let count = count_safe_reports(&data);
 
-    println!("{count}");
+    println!("Part 1: Safe reports: {count}");
 
     Ok(())
 }
