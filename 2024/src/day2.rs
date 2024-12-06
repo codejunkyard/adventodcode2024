@@ -4,8 +4,6 @@ use std::env;
 use std::error::Error;
 
 pub fn solve() -> Result<(), Box<dyn Error>> {
-    println!("Solving Day 2...");
-
     // Load environment variables from .env file
     dotenv().ok();
     let url = "https://adventofcode.com/2024/day/2/input";
