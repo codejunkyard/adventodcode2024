@@ -21,19 +21,19 @@ fn main() {
     match day.as_str() {
         "1" => {
             println!("Running solution for Day 1:");
-            day1::solve();
+            let _ = day1::solve();
         }
         "2" => {
             println!("Running solution for Day 2:");
-            day2::solve();
+            let _ = day2::solve();
         }
         "3" => {
             println!("Running solution for Day 3:");
-            day3::solve();
+            let _ = day3::solve();
         }
         "4" => {
             println!("Running solution for Day 4:");
-            day4::solve();
+            let _ = day4::solve();
         }
         _ => eprintln!("No solution available for Day {}", day),
     }

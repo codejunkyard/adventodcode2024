@@ -10,7 +10,7 @@ license = "MIT"
 
 [dependencies]
 # Custom library for reusable functions
-advent_lib = { path = "../advent_lib" }
+advent_lib = { path = "../lib" }
 
 # Add tokio if using asynchronous reqwest
 tokio = { version = "1", features = ["full"] }

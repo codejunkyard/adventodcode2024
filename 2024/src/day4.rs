@@ -14,8 +14,25 @@ pub fn solve() -> Result<(), Box<dyn Error>> {
     let input = fetch_input(url, &session_token)?;
 
     // Convert input to Vec<Vec<char>>
+    let grid: Vec<Vec<char>> = input.lines().map(|line| line.chars().collect()).collect();
 
-    //let grid: Vec<Vec<char>> = input.
+    let mut count = 0;
+
+    for (row_index, row) in grid.iter().enumerate() {
+        for (col_index, &col) in row.iter().enumerate() {
+            if col == 'X' {
+                count += count_xmas(&grid, row_index, col_index);
+            }
+        }
+    }
+
+    println!("{}", count);
 
     Ok(())
+}
+
+fn count_xmas(grid: &Vec<Vec<char>>, row: usize, col: usize) -> i32 {
+    println!("{}:{},{}", grid[row][col], row, col);
+
+    0
 }
