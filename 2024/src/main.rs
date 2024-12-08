@@ -6,6 +6,7 @@ mod day4;
 mod day5;
 mod day6;
 mod day7;
+mod day8;
 
 use std::env;
 
@@ -49,6 +50,10 @@ fn main() {
         "7" => {
             println!("Running solution for Day 7:");
             let _ = day7::solve();
+        }
+        "8" => {
+            println!("Running solution for Day 8:");
+            let _ = day8::solve();
         }
         _ => eprintln!("No solution available for Day {}", day),
     }
