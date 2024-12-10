@@ -12,7 +12,8 @@ pub fn solve() -> Result<(), Box<dyn Error>> {
 
     //let input = fetch_input(url, &session_token)?;
     //let input = "12345"; // 60
-    let input = "2333133121414131402";
+    //let input = "2333133121414131402";
+    let input = "23331331214141314024893970074";
 
     let digits: Vec<u8> = input
         .chars()
@@ -130,112 +131,72 @@ fn get_part_1(digits: &[u8]) -> usize {
 
 fn get_part_2(digits: &[u8]) -> i32 {
     let mut sum = 0;
-    //let mut buffer: Vec<usize> = Vec::new();
-    //let mut global_index = 0;
 
-    struct Space {
-        total: usize,
-        free: usize,
-    }
+    let mut disk: Vec<char> = Vec::new();
+    let mut files: Vec<(usize, usize, usize)> = Vec::new(); // index, index_len, digit
+    let mut total_bytes = 0;
 
-    let mut disk_space = Space { total: 0, free: 0 };
-
-    for (index, &value) in digits.iter().enumerate() {
-        disk_space.total += value as usize;
-
-        if index % 2 != 0 {
-            disk_space.free += value as usize;
-        }
-    }
-
-    let mut files: Vec<Vec<char>> = Vec::new();
-    // 2333133121414131402
-
-    // 7:9999<9999999999999999999999999999>
-
-    // 2:9<99>,
-    // 8888,
-    // 777,
-    // 6666,
-    // 5555,
-    // 44,
-    // 333,
-    // 2,
-    // 111,
-    // 00
-
-    for (index, &value) in digits.iter().rev().enumerate() {
-        if index % 2 == 0 {
-            print!("{}", value);
-        }
-    }
-
-    println!();
-
-    //print!("\nBuffer: ");
-    //buffer.iter().for_each(|&value| print!("{}", value));
-    //println!();
-
-    // Destructure the struct into variables
-    let Space { total, free } = disk_space;
-    println!(
-        "Disk space: Total: {}, Used: {}, Free: {}",
-        total,
-        total - free,
-        free,
-    );
-
-    println!("Length: {}", digits.len() / 2);
-
-    // 2333133121414131402
-    // 022111222 (0,2,4,3,4,5,12,14,16) => 60
-    'original: for (index, &value) in digits.iter().enumerate() {
-        //if global_index >= disk_space.total - disk_space.free {
-        //    break 'original;
-        //}
-
-        // 2333133121414131402
-        // 0 1 2 3 4 5 6 7 8 9 : index
-        // 2 3 1 3 2 4 4 3 4 2 :
-        //  3 3 3 1 1 1 1 1 0  : space
-
-        // 00...111...2...333.44.5555.6666.777.888899
-        // 0099.111...2...333.44.5555.6666.777.8888..
-        // 0099.1117772...333.44.5555.6666.....8888..
-        // 0099.111777244.333....5555.6666.....8888..
-        // 00992111777.44.333....5555.6666.....8888..
-        // 2858
-
-        if index % 2 == 0 {
-            for _ in 0..value {
-                print!("{}", (index / 2));
-                //sum += global_index * (index / 2);
-                //print!("[{sum}]");
-
-                //global_index += 1;
-
-                //if global_index >= disk_space.total - disk_space.free {
-                //    break 'original;
-                //}
-            }
+    for (i, &current_digit) in digits.iter().enumerate() {
+        let repeat_count = current_digit as usize;
+        let s = if i % 2 == 0 {
+            (i / 2).to_string()
         } else {
-            for _ in 0..value {
-                //let copy_digit = buffer.remove(0);
-                //print!("{copy_digit}");
-                print!(".");
-                //sum += global_index * copy_digit;
-                //print!("[{sum}]");
+            ".".to_string()
+        };
 
-                //global_index += 1;
+        print!("{}", s.repeat(repeat_count)); // Repeating string
 
-                //if global_index >= disk_space.total - disk_space.free {
-                //    break 'original;
-                //}
+        for _ in 0..repeat_count {
+            disk.extend(s.chars());
+        }
+
+        total_bytes += s.len() * repeat_count; // Adding to total bytes
+    }
+
+    let mut cummulative_index = 0;
+    // 107,86,71,46,40,36,
+    for i in 0..digits.len() {
+        let digit = digits[i] as usize;
+        let file_size = if i % 2 == 0 {
+            digit * (i / 2).to_string().len()
+        } else {
+            digit
+        };
+
+        println!("file_size: {}", file_size);
+
+        cummulative_index += file_size;
+        println!("cummulative_index: {}", cummulative_index);
+
+        if i % 2 == 0 {
+            if file_size > 9 {
+                continue;
             }
+
+            files.push((cummulative_index, i / 2, digit));
         }
     }
 
+    // for i in (0..digits.len()).step_by(2).rev() {
+    //     let file_size = digits[i] as usize * (i / 2).to_string().len();
+
+    //     if file_size > 9 {
+    //         continue;
+    //     }
+
+    //     files.push((total_bytes - file_size, i / 2, digits[i]));
+    // }
+
     println!();
+
+    for file in &files {
+        println!("{:?},", file);
+    }
+
+    println!();
+
+    println!("\ntotal_bytes: {}", total_bytes);
+    println!("{:?}", disk);
 
     sum
 }
