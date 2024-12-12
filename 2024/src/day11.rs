@@ -12,8 +12,9 @@ pub fn solve() -> Result<(), Box<dyn Error>> {
     let url = "https://adventofcode.com/2024/day/11/input";
     let session_token = env::var("SESSION_TOKEN").expect("SESSION_TOKEN must be set");
 
-    let input = fetch_input(url, &session_token)?;
-    //let input = "125 17";
+    //let input = fetch_input(url, &session_token)?;
+    let input = "125 17";
+    let depth = 7;
 
     let rocks: Vec<u64> = input
         .split_whitespace()
@@ -24,8 +25,6 @@ pub fn solve() -> Result<(), Box<dyn Error>> {
         .split_whitespace()
         .filter_map(|s| s.parse::<u32>().ok())
         .collect();
-
-    let depth = 25;
 
     // if depth <= 25 {
     //     let start = Instant::now();
@@ -214,19 +213,6 @@ fn get_part_2c(initial_rocks: Vec<u64>, depth: u8) -> usize {
 fn get_part_2d(rocks: Vec<u32>, depth: u8) -> usize {
     println!("{:?}, Depth: {}", rocks, depth);
 
-    let magic_table: Vec<(Vec<u8>, Vec<u8>)> = vec![
-        (vec![1, 1, 2, 4], vec![2, 0, 2, 4]), // Row for digit 0
-        (vec![1, 2, 4], vec![2, 0, 2, 4]),    // Row for digit 1
-        (vec![1, 2, 4], vec![4, 0, 4, 8]),    // Row for digit 2
-        (vec![1, 2, 4], vec![6, 0, 7, 2]),    // Row for digit 3
-        (vec![1, 2, 4], vec![8, 0, 9, 6]),    // Row for digit 4
-        (vec![1, 1, 2, 4, 8], vec![2, 0, 4, 8, 2, 8, 8, 0]), // Row for digit 5
-        (vec![1, 1, 2, 4, 8], vec![2, 4, 5, 7, 9, 4, 5, 6]), // Row for digit 6
-        (vec![1, 1, 2, 4, 8], vec![2, 8, 6, 7, 6, 0, 3, 2]), // Row for digit 7
-        (vec![1, 1, 2, 4, 8], vec![3, 2, 7, 7, 2, 6, 0, 8]), // Row for digit 8
-        (vec![1, 1, 2, 4, 8], vec![3, 6, 8, 5, 9, 1, 8, 4]), // Row for digit 9
-    ];
-
     let mut count = 0;
 
     for rock in rocks {
@@ -240,12 +226,10 @@ fn get_part_2d(rocks: Vec<u32>, depth: u8) -> usize {
         } else {
             if count_digits(rock) == 1 {
                 //short circuit the algorithm, hopefully drastically increase performance
-                *count += count_via_magic_table(rock, current_depth);
+                *count += count_via_magic_table(rock as usize, current_depth as usize);
                 return;
             } else {
-                if rock == 0 {
-                    count_rocks(1, current_depth - 1, count);
-                } else if count_digits(rock) % 2 == 0 {
+                if count_digits(rock) % 2 == 0 {
                     let (first_integer, second_integer) =
                         split_integer(rock, count_digits(rock) / 2);
 
@@ -258,15 +242,43 @@ fn get_part_2d(rocks: Vec<u32>, depth: u8) -> usize {
         }
     }
 
-    fn count_via_magic_table(rock: u32, current_depth: u8) -> usize {
-        // magic_table
-        println!(
-            "{rock}, Current depth: {}, Remaining depth: {}",
-            current_depth,
-            current_depth - 25
-        );
+    fn count_via_magic_table(rock: usize, remaining_depth: usize) -> usize {
+        let magic_table: Vec<(Vec<u8>, Vec<u8>)> = vec![
+            (vec![1, 1, 2, 4], vec![2, 0, 2, 4]), // Row for digit 0
+            (vec![1, 2, 4], vec![2, 0, 2, 4]),    // Row for digit 1
+            (vec![1, 2, 4], vec![4, 0, 4, 8]),    // Row for digit 2
+            (vec![1, 2, 4], vec![6, 0, 7, 2]),    // Row for digit 3
+            (vec![1, 2, 4], vec![8, 0, 9, 6]),    // Row for digit 4
+            (vec![1, 1, 2, 4, 8], vec![2, 0, 4, 8, 2, 8, 8, 0]), // Row for digit 5
+            (vec![1, 1, 2, 4, 8], vec![2, 4, 5, 7, 9, 4, 5, 6]), // Row for digit 6
+            (vec![1, 1, 2, 4, 8], vec![2, 8, 6, 7, 6, 0, 3, 2]), // Row for digit 7
+            (vec![1, 1, 2, 4, 8], vec![3, 2, 7, 7, 2, 6, 0, 8]), // Row for digit 8
+            (vec![1, 1, 2, 4, 8], vec![3, 6, 8, 5, 9, 1, 8, 4]), // Row for digit 9
+        ];
 
-        0
+        let mut count = 0;
+
+        if remaining_depth <= magic_table[rock].0.len() {
+            if remaining_depth == 0 {
+                println!("FOUND!");
+            } else {
+                print!("[{}:{}]", rock, remaining_depth);
+            }
+            // println!(
+            //     "{}:{}:{}",
+            //     rock,
+            //     remaining_depth,
+            //     magic_table[rock].0[remaining_depth - 1]
+            // );
+            count = magic_table[rock].0[remaining_depth - 1] as usize;
+        } else {
+            let adjusted_depth = remaining_depth - magic_table[rock].0.len();
+            for digit in magic_table[rock].1.clone() {
+                count += count_via_magic_table(digit as usize, adjusted_depth);
+            }
+        }
+
+        count
     }
 
     fn count_digits(n: u32) -> usize {
