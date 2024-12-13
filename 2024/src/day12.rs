@@ -8,7 +8,7 @@ pub fn solve() -> Result<(), Box<dyn Error>> {
     // Load environment variables from .env file
     dotenv().ok();
 
-    let url = "https://adventofcode.com/2024/day/10/input";
+    let url = "https://adventofcode.com/2024/day/12/input";
     let session_token = env::var("SESSION_TOKEN").expect("SESSION_TOKEN must be set");
 
     //let input = fetch_input(url, &session_token)?;
@@ -26,27 +26,26 @@ pub fn solve() -> Result<(), Box<dyn Error>> {
 }
 
 fn get_part_1(garden_map: &Vec<Vec<char>>) -> usize {
+    //  flood fill algorithm?
     let mut sum = 0;
 
     const DIRECTIONS: [(isize, isize); 4] = [(-1, 0), (0, 1), (1, 0), (0, -1)];
+    let rows = garden_map.len();
+    let cols = garden_map[0].len();
 
     let mut inventory: HashMap<char, (usize, usize)> = HashMap::new();
 
-    for row in 0..garden_map.len() {
-        for col in 0..garden_map[row].len() {
+    for row in 0..rows {
+        for col in 0..cols {
             // Traverse in all directions
-            let plant_type = garden_map[col][row];
+            let plant_type = garden_map[row][col];
             let mut perimeter: usize = 0;
 
             for (dx, dy) in &DIRECTIONS {
                 let x = col as isize + *dx;
                 let y = row as isize + *dy;
 
-                if x == -1
-                    || y == -1
-                    || x == garden_map[0].len() as isize
-                    || y == garden_map.len() as isize
-                {
+                if x == -1 || y == -1 || x > cols as isize - 1 || y > rows as isize - 1 {
                     perimeter += 1;
                 } else {
                     let x = x as usize;
