@@ -24,3 +24,6 @@ regex = "1"
 dotenv = "0.15"
 
 rayon = "1.10"
+
+#Day 13
+nalgebra = "0.33"
