@@ -27,3 +27,6 @@ rayon = "1.10"
 
 #Day 13
 nalgebra = "0.33"
+
+#Day 14
+crossterm = "0.28"
