@@ -14,6 +14,17 @@ pub fn solve() -> Result<(), Box<dyn Error>> {
     //let input = fetch_input(url, &session_token)?;
     let input = "RRRRIICCFF\nRRRRIICCCF\nVVRRRCCFFF\nVVRCCCJFFF\nVVVVCJJCFE\nVVIVCCJJEE\nVVIIICJJEE\nMIIIIIJJEE\nMIIISIJEEE\nMMMISSJEEE";
 
+    // RRRRIICCFF
+    // RRRRIICCCF
+    // VVRRRCCFFF
+    // VVRCCCJFFF
+    // VVVVCJJCFE
+    // VVIVCCJJEE
+    // VVIIICJJEE
+    // MIIIIIJJEE
+    // MIIISIJEEE
+    // MMMISSJEEE
+
     let garden_map: Vec<Vec<char>> = input.lines().map(|line| line.chars().collect()).collect();
 
     let count_part_1 = get_part_1(&garden_map);
@@ -30,7 +41,35 @@ fn get_part_1(garden_map: &Vec<Vec<char>>) -> usize {
 
     const DIRECTIONS: [(isize, isize); 4] = [(-1, 0), (0, 1), (1, 0), (0, -1)];
 
-    let mut inventory: HashMap<char, (usize, usize)> = HashMap::new();
+    let mut inventory: HashMap<char, Vec<(u32, u32)>> = HashMap::new();
+    let mut visited: Vec<Vec<bool>> = Vec::new();
+    let mut group_id: u32 = 0;
+
+    fn get_region(garden_map: &Vec<Vec<char>>, row: usize, col: usize) -> (u32, u32) {
+        let mut perimeter = 0;
+
+        for (dx, dy) in &DIRECTIONS {
+            let x = col as isize + *dx;
+            let y = row as isize + *dy;
+
+            if x == -1
+                || y == -1
+                || x == garden_map[0].len() as isize
+                || y == garden_map.len() as isize
+            {
+                perimeter += 1;
+            } else {
+                let x = x as usize;
+                let y = y as usize;
+
+                if garden_map[y][x] != plant_type {
+                    perimeter += 1;
+                } else {
+                    //(area, perimeter) = get_region(garden_map, row, col);
+                }
+            }
+        }
+    }
 
     for row in 0..garden_map.len() {
         for col in 0..garden_map[row].len() {
