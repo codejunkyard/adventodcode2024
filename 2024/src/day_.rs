@@ -1,6 +1,5 @@
 use advent_lib::fetch_input;
 use dotenv::dotenv;
-use std::collections::HashSet;
 use std::env;
 use std::error::Error;
 
